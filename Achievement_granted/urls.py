@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.home),
+    path('base/', views.base),
+    path('games/', views.games),
+    path('games/achievement/', views.achievement),
+    path('home/', views.home),
+    path('error404', views.error404),
 ]

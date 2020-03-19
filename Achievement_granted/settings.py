@@ -55,7 +55,9 @@ ROOT_URLCONF = 'Achievement_granted.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, "Achievement_granted/templates"),
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
