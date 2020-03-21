@@ -1,17 +1,18 @@
-{% load sass_tags %}
-{% load bootstrap4 %}
+{% extends "base.html"%}
 
-<html lang="pl">
-<head>
-
-    <link href="{% sass_src 'css/basic.scss' %}" rel="stylesheet" type="text/css" />
-    <meta charset="utf-8">
-    <title>Home Page</title>
-</head>
-<body>
-<div class ="test" >
-<h1>This is the Homepage</h1>
-<p>Hello World</p>
-    </div>
-</body>
-</html>
+{% block content %}
+<ul class="nav">
+  <li class="nav-item">
+    <a class="nav-link active" href="#">Active</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Link</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+  </li>
+</ul>
+{%endblock%}
