@@ -39,8 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'sass_processor',
     'bootstrap4',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.steam',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +77,35 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     'Steam': {
+#         'APP': {
+#             'key': ''
+#         }
+#     }
+# }
+
+SOCIALACCOUNT_PROVIDERS = {
+    'openid': {
+        'SERVERS': [
+            dict(id='steam',
+                 name='Steam',
+                 openid_url='https://steamcommunity.com/openid',
+                 secret="B3073FAA90311BF487D8959D3F3E00C9",
+                 stateless=True,),
+
+        ]
+    }
+}
 
 WSGI_APPLICATION = 'Achievement_granted.wsgi.application'
 
