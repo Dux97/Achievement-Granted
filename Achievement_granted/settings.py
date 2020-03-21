@@ -85,27 +85,8 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
+SITE_ID = 1
 
-# SOCIALACCOUNT_PROVIDERS = {
-#     'Steam': {
-#         'APP': {
-#             'key': ''
-#         }
-#     }
-# }
-
-SOCIALACCOUNT_PROVIDERS = {
-    'openid': {
-        'SERVERS': [
-            dict(id='steam',
-                 name='Steam',
-                 openid_url='https://steamcommunity.com/openid',
-                 secret="B3073FAA90311BF487D8959D3F3E00C9",
-                 stateless=True,),
-
-        ]
-    }
-}
 
 WSGI_APPLICATION = 'Achievement_granted.wsgi.application'
 

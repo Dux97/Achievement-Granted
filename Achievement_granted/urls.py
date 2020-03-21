@@ -25,5 +25,5 @@ urlpatterns = [
     path('games/achievement/', views.achievement),
     path('home/', views.home),
     path('error404', views.error404),
-    path('accounts/', include('allauth.urls')),
+    path('account/', include('allauth.urls')),
 ]
