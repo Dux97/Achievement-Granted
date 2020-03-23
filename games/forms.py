@@ -8,5 +8,6 @@ class UrlForm(forms.ModelForm):
         model = Game
         fields = ('name', 'wiki_url',)
 
-# class SendUrlForm(forms.form):
-#     url=forms.CharField(max_length=30)
+
+class SendUrlForm(forms.form):
+    url = forms.CharField(max_length=30)
