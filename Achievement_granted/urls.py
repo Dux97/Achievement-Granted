@@ -26,4 +26,5 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('error404', views.error404, name='error404'),
+    path('account/', include('allauth.urls')),
 ]
