@@ -27,4 +27,5 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('error404', views.error404, name='error404'),
     path('account/', include('allauth.urls')),
+    path('games/achievement/', include('games.urls')),
 ]
