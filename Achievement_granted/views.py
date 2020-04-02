@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from games.forms import SendUrlForm
 
 
 def home(request):
@@ -11,7 +12,14 @@ def games(request):
 
 
 def achievement(request):
-    return render(request, 'pages/achievement.html', {})
+    if request.method == 'POST':
+        form = SendUrlForm(request.POST)
+        if form.is_valid():
+            value = "przesłano"
+            return render(request, 'pages/achievement.html/',{'value': value})
+    else:
+        form = SendUrlForm()
+    return render(request, 'pages/achievement.html', {'form': form})
 
 
 def about(request):
