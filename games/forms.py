@@ -10,4 +10,4 @@ class UrlForm(forms.ModelForm):
 
 
 class SendUrlForm(forms.Form):
-    url = forms.CharField(max_length=30)
+    url = forms.CharField(max_length=150)
