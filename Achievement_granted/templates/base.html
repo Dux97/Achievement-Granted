@@ -12,8 +12,11 @@
 <body>
 <div class="top-nav-bar">
     <ul class="nav nav-pills justify-content-end">
-        <li>
+        <li class="nav-item">
             <a href="{% url 'home' %}">Achievement granted</a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'guide' %}">Poradnik</a>
         </li>
         <li class="nav-item">
             <a href="{% url 'games' %}">Gry</a>
@@ -22,7 +25,7 @@
             <a  href="{% url 'about' %}">O nas</a>
         </li>
         <li class="nav-item">
-            <a  href="/acount/steam/login/" >
+            <a  href="/account/steam/login/" >
                 <img src="{% static "images/Steam_login_button.png" %}">
             </a>
         </li>

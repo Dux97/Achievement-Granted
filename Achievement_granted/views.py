@@ -24,3 +24,8 @@ def base(request):
 
 def error404(request):
     return render(request, '404.html', {})
+
+
+def guide(request):
+    return  render(request, 'pages/guide.html', {})
+
