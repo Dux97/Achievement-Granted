@@ -24,9 +24,15 @@ def achievement(request):
             bf_content = BeautifulSoup(response, "html.parser")
 
             table = bf_content.find('table', attrs={'class': 'wikitable'})
+            rows = table.find_all('tr')
+            data = []
+            for row in rows:
+                cols = row.find_all('td')
+                cols = [ele.text.strip() for ele in cols]
+                data.append([ele for ele in cols if ele])
 
-            print(table)
-            return render(request, 'pages/achievement.html/', {'value': table})
+            print(data)
+            return render(request, 'pages/achievement.html/', {'value': data})
     else:
         form = SendUrlForm()
     return render(request, 'pages/achievement.html', {'form': form})
@@ -42,3 +48,4 @@ def base(request):
 
 def error404(request):
     return render(request, '404.html', {})
+
