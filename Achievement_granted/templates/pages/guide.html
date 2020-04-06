@@ -1,8 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="about-section">
+<div class="guide-section">
+    <div class="guide-box">
+        <h1>Poradnik jak zacząć korzystać ze stronki.</h1>
+        <b>By móc w pełni skorzystać z tej stronki, musisz na początku zmienić usawienia swojego profilu konta steam. Oto krótki poradnik który pokaże jak to zrobić krok po kroku.</b>
+        <h2>Krok #1</h2>
+        <p>Aby ustawić widoczność profilu, zaloguj się na swoje konto steam z aplikacji lub przez przeglądarkę.</p>
+        <h2>Krok #2</h2>
+        <p>Następnie wchodzimy na swój profil.</p>
+        <h2>Krok #3</h2>
+        <p>Poprzez kliknięcie przycisku "Edytuj profil", przechodzimy to ustawień profilu.</p>
+        <h2>Krok #4</h2>
+        <p>Wybieramy opcje ustawienia prywatności</p>
+        <img src="{% static "images/ustawienia_prywatnosci_steam.png" %}" alt="brak obrazka">
+        <h2>Krok #5</h2>
+        <p>i wreszcie zmieniamy "Widoczność mojego profilu" oraz "Widoczność szczegółów gry" na publiczny.</p>
 
+    </div>
 </div>
 
 

@@ -11,6 +11,7 @@
   animation: bganimation 15s infinite;
 }
 
+
 .section h1{
   text-align: center;
   font-size: 6rem;
@@ -58,7 +59,7 @@
   height: 95vh;
   justify-content: center;
   overflow: hidden;
-  background-image: linear-gradient(125deg,#2c3e50, #1b2838);
+  background-image: linear-gradient(125deg, #34495d, #1b2838);
   box-sizing: border-box;
 }
 .game-section h1{
@@ -106,7 +107,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-image: radial-gradient(#334657,#1b2838);
+  background-image: radial-gradient(#34495d,#1b2838);
   box-sizing: border-box;
 }
 
@@ -121,5 +122,34 @@
 
 .about-box p{
   color: white;
-
+  font-size: 1em;
 }
+
+.guide-section {
+  position: relative;
+  width: 100%;
+  height: 95vh;
+  background-image: linear-gradient(125deg,#34495d, #1b2838);
+  box-sizing: border-box;
+  background-size: 200%;
+}
+
+.guide-box {
+  position: absolute;
+  left: 10%;
+  color: white;
+}
+
+.guide-box h1{
+  color: white;
+  font-size: 3em;
+  margin-bottom: 0.5em;
+}
+
+.guide-box h2{
+  margin-top: 1em;
+  color: white;
+  font-size: 1.7em;
+}
+
+
