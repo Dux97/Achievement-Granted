@@ -154,3 +154,6 @@ SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'Achievement_granted/static/css')
 SASS_PROCESSOR_INCLUDE_DIRS = [
     os.path.join(BASE_DIR, 'Achievement_granted/static/css'),
 ]
+
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_ON_GET = True

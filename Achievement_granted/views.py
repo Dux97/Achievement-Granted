@@ -1,5 +1,6 @@
 import requests
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from games.forms import SendUrlForm
 from bs4 import BeautifulSoup
@@ -9,10 +10,12 @@ def home(request):
     return render(request, 'pages/home.html', {})
 
 
+@login_required(login_url='/account/steam/login')
 def games(request):
     return render(request, 'pages/games.html', {})
 
 
+@login_required(login_url='/account/steam/login')
 def achievement(request):
     if request.method == 'POST':
         form = SendUrlForm(request.POST)
@@ -49,3 +52,6 @@ def base(request):
 def error404(request):
     return render(request, '404.html', {})
 
+  
+def guide(request):
+    return  render(request, 'pages/guide.html', {})
