@@ -11,18 +11,21 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+# from os import environ
+import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from typing import Union
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+env = environ.Env()
+env.read_env(env.str('ENV_PATH', '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7mun^tkj8htudn(3(2a$ph2lo&ztt=4rp!qay)07vbl5pvj_d7'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,7 +89,8 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-SITE_ID = 1
+
+SITE_ID = env('SITE_ID')
 
 
 WSGI_APPLICATION = 'Achievement_granted.wsgi.application'
