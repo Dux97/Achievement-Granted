@@ -1,0 +1,133 @@
+.section {
+  position: relative;
+  width: 100%;
+  height: 95vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-image: linear-gradient(125deg, #2c3e50, #27ae60, #2980b9, #e74c3c);
+  background-size: 400%;
+  animation: bganimation 15s infinite; }
+
+.section h1 {
+  text-align: center;
+  font-size: 6rem;
+  font-family: Calibri;
+  padding: 20px;
+  margin: 15px;
+  z-index: 1; }
+
+@keyframes bganimation {
+  0% {
+    background-position: 0% 50%; }
+  50% {
+    background-position: 100% 50%; }
+  100% {
+    background-position: 0% 50%; } }
+
+.top-nav-bar {
+  background-color: rgba(154, 154, 154, 0.83);
+  height: 5vh; }
+
+.top-nav-bar a {
+  display: block;
+  height: auto;
+  color: #383838;
+  padding: 10px 16px;
+  text-decoration: none; }
+
+.top-nav-bar a:hover {
+  color: #2c3e50;
+  background-color: rgba(117, 117, 117, 0.83);
+  padding: 13px 16px; }
+
+.game-section {
+  position: relative;
+  width: 100%;
+  height: 95vh;
+  justify-content: center;
+  overflow: hidden;
+  background-image: linear-gradient(125deg, #34495d, #1b2838);
+  box-sizing: border-box; }
+
+.game-section h1 {
+  text-align: center;
+  padding: 15px;
+  font-family: "Century751 BT";
+  color: white; }
+
+.game-box {
+  position: relative;
+  top: 10%;
+  left: 20%;
+  right: 20%;
+  width: 60vw;
+  height: 12vh;
+  padding: 1vh;
+  margin: 10px 10px  20px 10px;
+  box-shadow: 0px 0px 10px 2px grey;
+  background-color: #16202d;
+  display: flex; }
+
+.game-box img {
+  position: relative;
+  width: 15%;
+  max-width: 60vw;
+  max-height: 100%; }
+
+.game-box p {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 25%;
+  text-align: center;
+  font-size: 2em;
+  font-family: Calibri;
+  color: white; }
+
+.about-section {
+  position: relative;
+  width: 100%;
+  height: 95vh;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-image: radial-gradient(#34495d, #1b2838);
+  box-sizing: border-box; }
+
+.about-box {
+  top: 40%;
+  left: 30%;
+  height: 40vh;
+  width: 30vw;
+  position: relative; }
+
+.about-box p {
+  color: white;
+  font-size: 1em; }
+
+.guide-section {
+  position: relative;
+  width: 100%;
+  height: 95vh;
+  background-image: linear-gradient(125deg, #34495d, #1b2838);
+  box-sizing: border-box;
+  background-size: 200%; }
+
+.guide-box {
+  position: absolute;
+  left: 10%;
+  color: white; }
+
+.guide-box h1 {
+  color: white;
+  font-size: 3em;
+  margin-bottom: 0.5em; }
+
+.guide-box h2 {
+  margin-top: 1em;
+  color: white;
+  font-size: 1.7em; }
+
+/*# sourceMappingURL=basic.css.map */
