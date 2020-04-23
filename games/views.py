@@ -1,12 +1,10 @@
-from .forms import UrlForm
 import requests
+from bs4 import BeautifulSoup
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+
 from games.forms import SendUrlForm
-from bs4 import BeautifulSoup
 
-
-# Create your views here.
 
 def home(request):
     return render(request, 'pages/home.html', {})
