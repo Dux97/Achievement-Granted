@@ -27,15 +27,22 @@ def achievement(request):
             bf_content = BeautifulSoup(response, "html.parser")
 
             table = bf_content.find('table', attrs={'class': 'wikitable'})
-            rows = table.find_all('tr')
-            data = []
-            for row in rows:
-                cols = row.find_all('td')
-                cols = [ele.text.strip() for ele in cols]
-                data.append([ele for ele in cols if ele])
+            # rows = table.find_all('tr')
+            #
+            # data = []
+            # for row in rows:
+            #     cols = row.find_all('td')
+            #     cols = [ele.text.strip() for ele in cols]
+            #     data.append([ele for ele in cols if ele])
 
-            print(data)
-            return render(request, 'pages/achievement.html/', {'value': data})
+            headers = [header.text.strip("\n") for header in table.find_all('th')]
+
+            results = [{headers[i]: cell.text for i, cell in enumerate(row.find_all('td'))}
+                       for row in table.find_all('tr')]
+            results.pop(0)
+            print(results)
+            print(headers)
+            return render(request, 'pages/achievement.html/', {'value': results})
     else:
         form = SendUrlForm()
     return render(request, 'pages/achievement.html', {'form': form})
