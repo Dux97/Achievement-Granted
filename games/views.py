@@ -59,7 +59,7 @@ def scrapTableFromUrl(url):
 
     results=[]
     #url2=url[:url.rfind('/')]
-    spliturl = url.rsplit('wiki', 1)[0]
+    spliturl = url.rsplit('/wiki', 1)[0]
 
     for b,row in enumerate(table.find_all('tr')):
         fullrow={}
@@ -69,11 +69,11 @@ def scrapTableFromUrl(url):
                     fullrow['link']=spliturl+cell.find('a').get('href')
 
                 else:
-                    fullrow['link'] ="brak linku"
+                    fullrow['link'] =spliturl+"#"
             fullrow[headers[i]]=cell.text.strip("\n")
         results.append(fullrow)
 
 
     results.pop(0)
-    print(type(spliturl))
+
     return results
