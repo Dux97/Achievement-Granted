@@ -24,41 +24,42 @@ def games(request):
     params = {"key": env("STEAM_KEY"), "steamid": provider_account["steamid"], "format":"json", "include_appinfo":"1"}
     resp = requests.get(api_base + method, params)
     data = resp.json()
-    method = "ISteamUserStats/GetSchemaForGame/v2/"
-    games = data["response"]["games"]
-    gameList = {}
-    for game in games:
-        params = {"key": env("STEAM_KEY"), "appid": game["appid"], "format": "json"}
-        resp = requests.get(api_base + method, params)
-        data = resp.json()
-        gameList[game["appid"]] = data["game"]
     return render(request, 'pages/games.html', {"games": data["response"]})
 
 
 @login_required(login_url='/account/steam/login')
 def achievement(request, appid):
-    if request.method == 'POST':
+    if request.method != 'POST':
+        form = SendUrlForm()
+        data = {'form': form}
+    else:
         form = SendUrlForm(request.POST)
         if form.is_valid():
             url = request.POST['url']
+            gameScrapped = scrapTableFromUrl(url)
 
-            response = requests.get(url).text
+            api_base = "http://api.steampowered.com/"
+            method = "ISteamUserStats/GetSchemaForGame/v2/"
+            params = {"key": env("STEAM_KEY"), "appid": appid, "format": "json"}
+            resp = requests.get(api_base + method, params)
+            game = resp.json()
 
-            bf_content = BeautifulSoup(response, "html.parser")
+            method = "ISteamUserStats/GetUserStatsForGame/v0002/"
+            for account in SocialAccount.objects.filter(user=request.user):
+                provider_account = account.get_provider_account().account.extra_data
+            params = {"key": env("STEAM_KEY"), "appid": appid, "steamid": provider_account["steamid"], "format": "json"}
+            resp = requests.get(api_base + method, params)
+            unlockedAchievement = resp.json()
+            playerUnlocked = [achievement['name'] for achievement in unlockedAchievement['playerstats']['achievements']]
+            gameAchievements = game['game']['availableGameStats']['achievements']
+            for achievement in gameAchievements:
+                if achievement['name'] in playerUnlocked:
+                    achievement['achieved'] = 1
+                else:
+                    achievement['achieved'] = 0
+            data = {'achievementSteam': gameAchievements, 'achievementScrap': gameScrapped}
 
-            table = bf_content.find('table', attrs={'class': 'wikitable'})
-            rows = table.find_all('tr')
-            data = []
-            for row in rows:
-                cols = row.find_all('td')
-                cols = [ele.text.strip() for ele in cols]
-                data.append([ele for ele in cols if ele])
-
-            print(data)
-            return render(request, 'pages/achievement.html/', {'value': data})
-    else:
-        form = SendUrlForm()
-    return render(request, 'pages/achievement.html', {'form': form})
+    return render(request, 'pages/achievement.html', data)
 
 
 def about(request):
@@ -75,3 +76,24 @@ def error404(request):
 
 def guide(request):
     return render(request, 'pages/guide.html', {})
+
+
+def scrapTableFromUrl(url):
+    response = requests.get(url).text
+    bf_content = BeautifulSoup(response, "html.parser")
+    table = bf_content.find('table', attrs={'class': 'wikitable'})
+    headers = [header.text.strip("\n") for header in table.find_all('th')]
+    results = []
+    splitUrl = url.rsplit('wiki', 1)[0]
+    for b, row in enumerate(table.find_all('tr')):
+        fullRow = {}
+        for i, cell in enumerate(row.find_all('td')):
+            if headers[i] == "Name":
+                if cell.find('a').get('href'):
+                    fullRow['link'] = splitUrl + cell.find('a').get('href')
+                else:
+                    fullRow['link'] = "brak linku"
+            fullRow[headers[i]] = cell.text.strip("\n")
+        results.append(fullRow)
+    results.pop(0)
+    return results

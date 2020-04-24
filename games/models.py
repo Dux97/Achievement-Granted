@@ -13,4 +13,4 @@ class Scrap(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
     table_html = models.CharField(max_length=200)
-    archivement_html = models.CharField(max_length=200)
+    achievement_html = models.CharField(max_length=200)
