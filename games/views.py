@@ -62,7 +62,21 @@ def scrapTableFromUrl(url):
 
     headers = [header.text.strip("\n") for header in table.find_all('th')]
 
-    results = [{headers[i]: cell.text for i, cell in enumerate(row.find_all('td'))}
-               for row in table.find_all('tr')]
+    # results = [{headers[i]: cell.text for i, cell in enumerate(row.find_all('td'))}
+    #            for row in table.find_all('tr')]
+    results=[]
+    for b,row in enumerate(table.find_all('tr')):
+        ro={}
+        for i, cell in enumerate(row.find_all('td')):
+            if headers[i]=="Name":
+                ro['link']=cell
+
+            ro[headers[i]]=cell.text
+        results.append(ro)
+
     results.pop(0)
+
+
+
+    print(results)
     return results
