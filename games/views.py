@@ -52,31 +52,28 @@ def scrapTableFromUrl(url):
     bf_content = BeautifulSoup(response, "html.parser")
 
     table = bf_content.find('table', attrs={'class': 'wikitable'})
-    # rows = table.find_all('tr')
-    #
-    # data = []
-    # for row in rows:
-    #     cols = row.find_all('td')
-    #     cols = [ele.text.strip() for ele in cols]
-    #     data.append([ele for ele in cols if ele])
+
 
     headers = [header.text.strip("\n") for header in table.find_all('th')]
 
-    # results = [{headers[i]: cell.text for i, cell in enumerate(row.find_all('td'))}
-    #            for row in table.find_all('tr')]
+
     results=[]
+    #url2=url[:url.rfind('/')]
+    spliturl = url.rsplit('wiki', 1)[0]
+
     for b,row in enumerate(table.find_all('tr')):
-        ro={}
+        fullrow={}
         for i, cell in enumerate(row.find_all('td')):
             if headers[i]=="Name":
-                ro['link']=cell
+                if(cell.find('a').get('href')):
+                    fullrow['link']=spliturl+cell.find('a').get('href')
 
-            ro[headers[i]]=cell.text
-        results.append(ro)
+                else:
+                    fullrow['link'] ="brak linku"
+            fullrow[headers[i]]=cell.text.strip("\n")
+        results.append(fullrow)
+
 
     results.pop(0)
-
-
-
-    print(results)
+    print(type(spliturl))
     return results

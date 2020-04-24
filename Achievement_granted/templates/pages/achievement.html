@@ -27,7 +27,12 @@
                     {% for row in value %}
                         <tr>
                              {% for key,a in row.items %}
-                            <td>{{ a}}  </td>
+                            {% if key == "link" %}
+                                <td><a href="{{ a}}">#</a>  </td>
+                                {% else %}
+                                <td>{{ a}}  </td>
+                                 {% endif %}
+
                              {% endfor %}
                         </tr>
                     {% endfor %}
