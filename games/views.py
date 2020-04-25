@@ -58,6 +58,3 @@ def error404(request):
 
 def guide(request):
     return render(request, 'pages/guide.html', {})
-
-
-
