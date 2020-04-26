@@ -4,17 +4,16 @@
 {% block content %}
 <div class="game-section">
 <h1>Lista Gier</h1>
-    <div class="">
+        {% for game in games.games %}
         <div class="game-box">
-            <img src="{% static "images/wiedzmin.jpg" %}">
-            <p>Wiedźmin 3</p>
+            <img src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_logo_url}}.jpg" alt="brak">
+            <p>{{ game.name }}</p>
+              <a href="{% url 'achievement' game.appid %}" type="button" class="btn btn-dark">Osiągnięcia</a>
+                <div class="achievement-number">
+                    <p>Postęp osiągnięc:</p>
+                </div>
         </div>
-        <div class="game-box">
-            <img src="{% static "images/wiedzmin.jpg" %}">
-            <p>Wiedźmin 3</p>
-        </div>
-    </div>
-
+        {% endfor %}
 </div>
 
 
