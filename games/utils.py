@@ -2,6 +2,7 @@ import environ
 import requests
 from allauth.socialaccount.models import SocialAccount
 from bs4 import BeautifulSoup
+from operator import itemgetter
 
 env = environ.Env()
 env.read_env(env.str('ENV_PATH', '.env'))
@@ -63,3 +64,14 @@ def scrapTableFromUrl(url):
         results.append(fullRow)
     results.pop(0)
     return results
+
+
+def addWikiLink(steamAchievements, gameScrapped):
+    print(sorted(steamAchievements, key=itemgetter('displayName')))
+    print(sorted(gameScrapped, key=itemgetter('Name')))
+    sortedSteamList = sorted(steamAchievements, key=itemgetter('displayName'))
+    sortedScraped = sorted(gameScrapped, key=itemgetter('Name'))
+    for achievment in sortedSteamList:
+        print(next(test['link'] for test in sortedScraped if test['Name'] == achievment['displayName']))
+    achievment['link'] = next(test for test in sortedScraped)
+    return True

@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from requests import ConnectionError, Timeout
+
 from games.forms import SendUrlForm
 from games.utils import scrapTableFromUrl, getUserGames, getGameInfo, getUnlockedAchievment, \
-    addUnlockedToDetails
+    addUnlockedToDetails, addWikiLink
 
 
 def home(request):
@@ -12,8 +13,12 @@ def home(request):
 
 @login_required(login_url='/account/steam/login')
 def games(request):
-    data = getUserGames(request)
-    return render(request, 'pages/games.html', {"games": data["response"]})
+    try:
+        resp = getUserGames(request)
+        data = {"games": resp["response"]}
+    except (ConnectionError, Timeout):
+        data = {'errorDescription': "Something wrong. Please try again."}
+    return render(request, 'pages/games.html', data)
 
 
 @login_required(login_url='/account/steam/login')
@@ -29,18 +34,25 @@ def achievement(request, appid):
                 gameScrapped = scrapTableFromUrl(url)
                 game = getGameInfo(appid)
                 unlockedAchievement = getUnlockedAchievment(request, appid)
-                gameAchievements = game['game']['availableGameStats']['achievements']
-                if not unlockedAchievement:
-                    playerUnlocked = ["nothingUnlocked"]
+                try:
+                    steamAchievements = game['game']['availableGameStats']['achievements']
+                except KeyError:
+                    data = {"errorDescription": "No achievements in this game."}
                 else:
+                    steamAchievements = game['game']['availableGameStats']['achievements']
+                    # gameAchievements = addWikiLink(steamAchievements, gameScrapped)
+                try:
                     playerUnlocked = [achievement['name'] for achievement in
                                       unlockedAchievement['playerstats']['achievements']]
-
-                data = {'achievementSteam': addUnlockedToDetails(gameAchievements, playerUnlocked),
-                        'achievementScrap': gameScrapped}
+                except KeyError:
+                    playerUnlocked = []
             except (ConnectionError, Timeout):
-                data = {'error': "Something wrong. Please try again."}
-
+                data = {'errorDescription': "Something wrong. Please try again."}
+            try:
+                data
+            except UnboundLocalError:
+                data = {'achievementSteam': addUnlockedToDetails(steamAchievements, playerUnlocked),
+                        'achievementScrap': gameScrapped}
     return render(request, 'pages/achievement.html', data)
 
 
