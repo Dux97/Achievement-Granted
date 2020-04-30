@@ -75,3 +75,17 @@ def addWikiLink(steamAchievements, gameScrapped):
         print(next(test['link'] for test in sortedScraped if test['Name'] == achievment['displayName']))
     achievment['link'] = next(test for test in sortedScraped)
     return True
+
+
+def scrapLinkAndAddToTable(url, table):
+    response = requests.get(url).text
+    bf_content = BeautifulSoup(response, "html.parser")
+    #splitUrl = url.rsplit('/wiki', 1)[0]
+    domain = url.split( "//" )[-1].split("/")[0]
+    for row in table:
+        if bf_content.find("a", text=row["displayName"]):
+            row["link"] = "https://"+domain + bf_content.find("a", text=row["displayName"]).get("href")
+        else:
+            row["link"]="#"
+
+    return table

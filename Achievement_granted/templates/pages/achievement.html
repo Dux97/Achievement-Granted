@@ -17,6 +17,7 @@
                     <th scope="col">Ikony</th>
                     <th scope="col">Osiągnięcie</th>
                     <th scope="col">Opis</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -24,14 +25,29 @@
         {% if achievement.achieved == 0 %}
                 <tr>
                     <td><img src="{{ achievement.icongray }}"img></td>
-                    <td>{{ achievement.displayName }}</td>
+                    <td>
+                    {% if achievement.link == "#" %}
+                        {{ achievement.displayName }}
+                    {% else %}
+                        <a href="{{ achievement.link }}">{{ achievement.displayName }}</a>
+                    {% endif %}
+                    </td>
+                   ```
                     <td>{{ achievement.description }}</td>
+
                 </tr>
         {% else %}
                 <tr class="achievedSteam">
                     <td><img src="{{ achievement.icon }}"img></td>
-                    <td>{{ achievement.displayName }}</td>
+                    <td>
+                    {% if achievement.link == "#" %}
+                        {{ achievement.displayName }}
+                    {% else %}
+                        <a href="{{ achievement.link }}">{{ achievement.displayName }}</a>
+                    {% endif %}
+                    </td>
                     <td>{{ achievement.description }}</td>
+
                 </tr>
         {% endif %} 
 

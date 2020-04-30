@@ -4,7 +4,7 @@ from requests import ConnectionError, Timeout
 
 from games.forms import SendUrlForm
 from games.utils import scrapTableFromUrl, getUserGames, getGameInfo, getUnlockedAchievment, \
-    addUnlockedToDetails, addWikiLink
+    addUnlockedToDetails, addWikiLink,scrapLinkAndAddToTable
 
 
 def home(request):
@@ -31,11 +31,14 @@ def achievement(request, appid):
         if form.is_valid():
             url = request.POST['url']
             try:
-                gameScrapped = scrapTableFromUrl(url)
+                gameScrapped ={} #scrapTableFromUrl(url)
+
                 game = getGameInfo(appid)
                 unlockedAchievement = getUnlockedAchievment(request, appid)
                 try:
                     steamAchievements = game['game']['availableGameStats']['achievements']
+                    gamedata2=scrapLinkAndAddToTable(url, steamAchievements)
+
                 except KeyError:
                     data = {"errorDescription": "No achievements in this game."}
                 else:
@@ -51,7 +54,7 @@ def achievement(request, appid):
             try:
                 data
             except UnboundLocalError:
-                data = {'achievementSteam': addUnlockedToDetails(steamAchievements, playerUnlocked),
+                data = {'achievementSteam': addUnlockedToDetails(gamedata2, playerUnlocked),
                         'achievementScrap': gameScrapped}
     return render(request, 'pages/achievement.html', data)
 
