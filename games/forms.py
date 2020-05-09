@@ -10,4 +10,6 @@ class UrlForm(forms.ModelForm):
 
 
 class SendUrlForm(forms.Form):
-    url = forms.CharField(max_length=150)
+    url = forms.CharField(label="", max_length=150, widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                                  'placeholder': 'Url',
+                                                                                  }))
