@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 import environ
 import requests
 from allauth.socialaccount.models import SocialAccount
@@ -44,22 +46,13 @@ def addUnlockedToDetails(gameAchievements, playerUnlocked):
     return gameAchievements
 
 
-def scrapTableFromUrl(url):
+def scrapLinkAndAddToTable(url, table):
     response = requests.get(url).text
     bf_content = BeautifulSoup(response, "html.parser")
-    table = bf_content.find('table', attrs={'class': 'wikitable'})
-    headers = [header.text.strip("\n") for header in table.find_all('th')]
-    results = []
-    splitUrl = url.rsplit('wiki', 1)[0]
-    for row in table.find_all('tr'):
-        fullRow = {}
-        for cellIndex, cell in enumerate(row.find_all('td')):
-            if headers[cellIndex] == "Name":
-                if cell.find('a').get('href'):
-                    fullRow['link'] = splitUrl + cell.find('a').get('href')
-                else:
-                    fullRow['link'] = "#"
-            fullRow[headers[cellIndex]] = cell.text.strip("\n")
-        results.append(fullRow)
-    results.pop(0)
-    return results
+    domain = url.split( "//" )[-1].split("/")[0]
+    for row in table:
+        if bf_content.find("a", text=row["displayName"]):
+            row["link"] = "https://" + domain + bf_content.find("a", text=row["displayName"]).get("href")
+        else:
+            row["link"] = "#"
+    return table
