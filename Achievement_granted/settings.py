@@ -14,6 +14,8 @@ import os
 from typing import Union
 
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -160,3 +162,9 @@ SASS_PROCESSOR_INCLUDE_DIRS = [
 
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_LOGOUT_ON_GET = True
+
+sentry_sdk.init(
+    dsn=env('SENTRY_KEY'),
+    integrations=[DjangoIntegration()],
+    send_default_pii=True
+)

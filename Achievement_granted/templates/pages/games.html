@@ -3,18 +3,59 @@
 
 {% block content %}
 <div class="game-section">
-<h1>Lista Gier</h1>
-        {% for game in games.games %}
-        <div class="game-box">
-            <img src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_logo_url}}.jpg" alt="brak">
-            <p>{{ game.name }}</p>
-              <a href="{% url 'achievement' game.appid %}" type="button" class="btn btn-dark">Osiągnięcia</a>
-                <div class="achievement-number">
-                    <p>Postęp osiągnięc:</p>
-                </div>
+    <h1>List of Games</h1>
+    {% if errorDescription %}
+        <div class="alert alert-danger" role="alert" id="error-pop-up">
+            No achievements in this game.
         </div>
-        {% endfor %}
+    {% endif %}
+    <input type="text" id="search-input" onkeyup="SearchAchivement()"
+           class="form-control" placeholder="Search for names.." title="Type in a name">
+    <table class="table table-dark" id="game-table">
+        <tbody>
+            {% for game in games.games %}
+                <tr class="game">
+                <td>
+                    <img src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_logo_url}}.jpg"
+                         alt="none">
+                </td>
+                <td>
+                    {{ game.name }}
+                </td>
+                <td>
+                    <a href="{% url 'achievement' game.appid %}"
+                       type="button" class="btn btn-secondary">
+                        Achievements
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
+<script type="text/javascript">
+let timePeriodInMs = 4000
+let error_popup = document.getElementById("error-pop-up")
+if (error_popup){
+    setTimeout(function () {
+    error_popup.style.display = "none";
+}, timePeriodInMs)
+}
+const SearchAchivement = () => {
+  let input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("search-input");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("game-table");
+  tr = table.getElementsByTagName("tr");
 
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+    }
+  }
+}
+</script>
 {%endblock%}
