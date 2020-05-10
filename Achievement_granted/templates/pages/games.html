@@ -3,18 +3,47 @@
 
 {% block content %}
 <div class="game-section">
-<h1>Lista Gier</h1>
-        {% for game in games.games %}
-        <div class="game-box">
-            <img src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_logo_url}}.jpg" alt="brak">
-            <p>{{ game.name }}</p>
-              <a href="{% url 'achievement' game.appid %}" type="button" class="btn btn-dark">Osiągnięcia</a>
-                <div class="achievement-number">
-                    <p>Postęp osiągnięc:</p>
-                </div>
-        </div>
-        {% endfor %}
+    <h1>Lista Gier</h1>
+    <input type="text" id="search-input" onkeyup="SearchAchivement()"
+           class="form-control" placeholder="Search for names.." title="Type in a name">
+    <table class="table table-dark" id="game-table">
+        <tbody>
+            {% for game in games.games %}
+                <tr class="game">
+                <td>
+                    <img src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_logo_url}}.jpg"
+                         alt="none">
+                </td>
+                <td>
+                    {{ game.name }}
+                </td>
+                <td>
+                    <a href="{% url 'achievement' game.appid %}"
+                       type="button" class="btn btn-secondary">
+                        Osiągnięcia
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
+<script type="text/javascript">
+const SearchAchivement = () => {
+  let input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("search-input");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("game-table");
+  tr = table.getElementsByTagName("tr");
 
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+    }
+  }
+}
+</script>
 {%endblock%}

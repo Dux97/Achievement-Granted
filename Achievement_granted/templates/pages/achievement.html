@@ -17,13 +17,14 @@
         </div>
     </form>
 </div></div>
-        <table class="table table-dark">
+    <input type="text" id="search-input" onkeyup="SearchAchivement()"
+           class="form-control" placeholder="Search for names.." title="Type in a name">
+        <table class="table table-dark" id="achievement-table">
             <thead>
                 <tr>
                     <th scope="col">Ikony</th>
                     <th scope="col">Osiągnięcie</th>
                     <th scope="col">Opis</th>
-
                 </tr>
             </thead>
             <tbody>
@@ -32,28 +33,25 @@
                 <tr>
                     <td><img src="{{ achievement.icongray }}"img></td>
                     <td>
-                    {% if achievement.link == "#" %}
+                    {% if "link" not in achievement %}
                         {{ achievement.displayName }}
                     {% else %}
                         <a href="{{ achievement.link }}">{{ achievement.displayName }}</a>
                     {% endif %}
                     </td>
-
                     <td>{{ achievement.description }}</td>
-
                 </tr>
         {% else %}
                 <tr class="achievedSteam">
                     <td><img src="{{ achievement.icon }}"img></td>
                     <td>
-                    {% if achievement.link == "#" %}
+                    {% if "link" not in achievement %}
                         {{ achievement.displayName }}
                     {% else %}
                         <a href="{{ achievement.link }}">{{ achievement.displayName }}</a>
                     {% endif %}
                     </td>
                     <td>{{ achievement.description }}</td>
-
                 </tr>
         {% endif %} 
 
@@ -62,5 +60,21 @@
         </table>
     </div>
 
+<script type="text/javascript">
+const SearchAchivement = () => {
+  let input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("search-input");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("achievement-table");
+  tr = table.getElementsByTagName("tr");
 
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
+    }
+  }
+}
+</script>
 {% endblock %}

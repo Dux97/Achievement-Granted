@@ -23,31 +23,39 @@ def games(request):
 
 @login_required(login_url='/account/steam/login')
 def achievement(request, appid):
+    errorDescr = {"errorDescription": False}
     if request.method != 'POST':
         form = SendUrlForm()
-        data = {'form': form}
+        try:
+            game = getGameInfo(appid)
+            unlockedAchievement = getUnlockedAchievment(request, appid)
+            try:
+                steamAchievements = game['game']['availableGameStats']['achievements']
+            except KeyError:
+                errorDescr = {"errorDescription": "No achievements in this game."}
+            try:
+                playerUnlocked = [achievement['name'] for achievement in
+                                  unlockedAchievement['playerstats']['achievements']]
+            except KeyError:
+                playerUnlocked = []
+        except (ConnectionError, Timeout):
+            errorDescr = {'errorDescription': "Something wrong. Please try again."}
+        try:
+            fullAchievementList = addUnlockedToDetails(steamAchievements, playerUnlocked)
+            request.session['fullAchievementList'] = fullAchievementList
+            request.session['selected_project_id'] = steamAchievements
+        except UnboundLocalError:
+            errorDescr = {"errorDescription": "No achievements in this game."}
+            fullAchievementList = {}
+        data = {'achievementSteam': fullAchievementList,
+                "error": errorDescr, 'form': form}
     else:
         form = SendUrlForm(request.POST)
-        errorDescr = {"errorDescription": False}
         if form.is_valid():
             url = request.POST['url']
-            try:
-                game = getGameInfo(appid)
-                unlockedAchievement = getUnlockedAchievment(request, appid)
-                try:
-                    steamAchievements = game['game']['availableGameStats']['achievements']
-                    scrapedAchievements = scrapLinkAndAddToTable(url, steamAchievements)
-                except KeyError:
-                    errorDescr = {"errorDescription": "No achievements in this game."}
-                try:
-                    playerUnlocked = [achievement['name'] for achievement in
-                                      unlockedAchievement['playerstats']['achievements']]
-                except KeyError:
-                    playerUnlocked = []
-            except (ConnectionError, Timeout):
-                errorDescr = {'errorDescription': "Something wrong. Please try again."}
-            data = {'achievementSteam': addUnlockedToDetails(scrapedAchievements, playerUnlocked),
-                    "error": errorDescr}
+            fullAchievementList = request.session.get('fullAchievementList')
+            data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
+                "error": errorDescr, 'form': form}
     return render(request, 'pages/achievement.html', data)
 
 
