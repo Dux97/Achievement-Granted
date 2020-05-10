@@ -3,7 +3,12 @@
 
 {% block content %}
 <div class="game-section">
-    <h1>Lista Gier</h1>
+    <h1>List of Games</h1>
+    {% if errorDescription %}
+        <div class="alert alert-danger" role="alert" id="error-pop-up">
+            No achievements in this game.
+        </div>
+    {% endif %}
     <input type="text" id="search-input" onkeyup="SearchAchivement()"
            class="form-control" placeholder="Search for names.." title="Type in a name">
     <table class="table table-dark" id="game-table">
@@ -20,7 +25,7 @@
                 <td>
                     <a href="{% url 'achievement' game.appid %}"
                        type="button" class="btn btn-secondary">
-                        Osiągnięcia
+                        Achievements
                     </a>
                 </td>
             </tr>
@@ -30,6 +35,13 @@
 </div>
 
 <script type="text/javascript">
+let timePeriodInMs = 4000
+let error_popup = document.getElementById("error-pop-up")
+if (error_popup){
+    setTimeout(function () {
+    error_popup.style.display = "none";
+}, timePeriodInMs)
+}
 const SearchAchivement = () => {
   let input, filter, table, tr, td, i, txtValue;
   input = document.getElementById("search-input");

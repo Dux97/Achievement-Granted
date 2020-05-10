@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from requests import ConnectionError, Timeout
 
 from games.forms import SendUrlForm
@@ -15,7 +15,12 @@ def home(request):
 def games(request):
     try:
         resp = getUserGames(request)
-        data = {"games": resp["response"]}
+        data = {"games": resp["response"],
+                'errorDescription': request.session.get('noAchievements')}
+        try:
+            del request.session['noAchievements']
+        except KeyError:
+            pass
     except (ConnectionError, Timeout):
         data = {'errorDescription': "Something wrong. Please try again."}
     return render(request, 'pages/games.html', data)
@@ -33,6 +38,8 @@ def achievement(request, appid):
                 steamAchievements = game['game']['availableGameStats']['achievements']
             except KeyError:
                 errorDescr = {"errorDescription": "No achievements in this game."}
+                request.session['noAchievements'] = errorDescr
+                return redirect('games')
             try:
                 playerUnlocked = [achievement['name'] for achievement in
                                   unlockedAchievement['playerstats']['achievements']]
@@ -42,8 +49,8 @@ def achievement(request, appid):
             errorDescr = {'errorDescription': "Something wrong. Please try again."}
         try:
             fullAchievementList = addUnlockedToDetails(steamAchievements, playerUnlocked)
-            request.session['fullAchievementList'] = fullAchievementList
-            request.session['selected_project_id'] = steamAchievements
+            request.session[f'fullAchievementList{appid}'] = fullAchievementList
+            request.session[f'selected_project_id{appid}'] = steamAchievements
         except UnboundLocalError:
             errorDescr = {"errorDescription": "No achievements in this game."}
             fullAchievementList = {}
@@ -53,7 +60,7 @@ def achievement(request, appid):
         form = SendUrlForm(request.POST)
         if form.is_valid():
             url = request.POST['url']
-            fullAchievementList = request.session.get('fullAchievementList')
+            fullAchievementList = request.session.get(f'fullAchievementList{appid}')
             data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
                 "error": errorDescr, 'form': form}
     return render(request, 'pages/achievement.html', data)
