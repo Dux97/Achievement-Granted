@@ -12,6 +12,12 @@
     <input type="text" id="search-input" onkeyup="SearchAchivement()"
            class="form-control" placeholder="Search for names.." title="Type in a name">
     <table class="table table-dark" id="game-table">
+        <thead>
+            <tr>
+                <th scope="col">Icon</th>
+                <th scope="col">Title</th>
+            </tr>
+        </thead>
         <tbody >
             {% for game in games.games %}
                 <tr class="game">

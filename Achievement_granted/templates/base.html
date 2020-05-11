@@ -14,7 +14,7 @@
 
 <div class="top-nav-bar">
     {% if user.is_authenticated %}
-     <p>Zalogowany jako {{user}}</p>
+     <p>Logged as {{user}}</p>
     {% endif %}
 
     <ul class="nav nav-pills justify-content-end">
@@ -22,13 +22,13 @@
             <a href="{% url 'home' %}">Achievement Granted</a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'guide' %}">Poradnik</a>
+            <a href="{% url 'guide' %}">Guide</a>
         </li>
         <li class="nav-item">
-            <a href="{% url 'games' %}">Gry</a>
+            <a href="{% url 'games' %}">Games</a>
         </li>
         <li class="nav-item">
-            <a  href="{% url 'about' %}">O nas</a>
+            <a  href="{% url 'about' %}">About Us</a>
         </li>
         <li class="nav-item">
             {% if user.is_anonymous %}
@@ -36,7 +36,7 @@
                 <img src="{% static "images/Steam_login_button.png" %}">
             </a>
              {% else %}
-                <a href="/account/logout/">Wyloguj</a>
+                <a href="/account/logout/">Log Out</a>
             {% endif %}
         </li>
     </ul>
