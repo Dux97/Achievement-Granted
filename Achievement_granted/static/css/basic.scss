@@ -13,7 +13,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   justify-content: center;
   overflow: hidden;
   background-image: $backgroundlineargradient;
-
+  background-size: auto;
 }
 .video-container{
   position: relative;
@@ -79,10 +79,11 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 .game-section{
   position: relative;
   width: 100%;
-  min-height: 95vh;
+  min-height: 100vh;
   justify-content: center;
   overflow: hidden;
   background-image:$backgroundlineargradient;
+  background-size: auto;
   box-sizing: border-box;
 }
 
@@ -157,6 +158,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 
 .guide-section {
   position: relative;
+  padding-top: 2%;
   width: 99vw;
   min-height: 95vh;
   overflow: hidden;
