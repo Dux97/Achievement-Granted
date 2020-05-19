@@ -1,9 +1,6 @@
-from json import JSONDecodeError
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from requests import ConnectionError, Timeout
-from requests.exceptions import MissingSchema
 
 from games.forms import SendUrlForm
 from games.utils import getUserGames, getGameInfo, getUnlockedAchievment, \
@@ -48,11 +45,8 @@ def achievement(request, appid):
                                   unlockedAchievement['playerstats']['achievements']]
             except KeyError:
                 playerUnlocked = []
-        except (ConnectionError, Timeout, JSONDecodeError):
-            if JSONDecodeError:
-                return redirect('guide')
-            else:
-                errorDescr = {'errorDescription': "Something wrong. Please try again."}
+        except (ConnectionError, Timeout):
+            errorDescr = {'errorDescription': "Something wrong. Please try again."}
         try:
             fullAchievementList = addUnlockedToDetails(steamAchievements, playerUnlocked)
             request.session[f'fullAchievementList{appid}'] = fullAchievementList
@@ -67,13 +61,8 @@ def achievement(request, appid):
         if form.is_valid():
             url = request.POST['url']
             fullAchievementList = request.session.get(f'fullAchievementList{appid}')
-            try:
-                data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
-                        "error": errorDescr, 'form': form}
-            except MissingSchema:
-                errorDescr = {"errorDescription": "Bad url for scrap. Try diffrent."}
-                data = {'achievementSteam': fullAchievementList,
-                        "error": errorDescr, 'form': form}
+            data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
+                "error": errorDescr, 'form': form}
     return render(request, 'pages/achievement.html', data)
 
 
@@ -85,7 +74,7 @@ def base(request):
     return render(request, 'base.html', {})
 
 
-def error404(request, exception=None):
+def error404(request):
     return render(request, '404.html', {})
 
 
