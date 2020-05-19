@@ -51,6 +51,8 @@ def scrapLinkAndAddToTable(url, table):
     bf_content = BeautifulSoup(response, "html.parser")
     domain = url.split( "//" )[-1].split("/")[0]
     for row in table:
+        if row["displayName"][-1] == " ":
+            row["displayName"] = row["displayName"][:-1]
         if bf_content.find("a", text=row["displayName"]):
             row["link"] = "https://" + domain + bf_content.find("a", text=row["displayName"]).get("href")
         else:

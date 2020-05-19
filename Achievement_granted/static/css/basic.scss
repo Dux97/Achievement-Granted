@@ -1,3 +1,9 @@
+$textcolor: white;
+$backgroundcolor: darkblue;
+$backgroundlineargradient: linear-gradient(125deg, #34495d, #1b2838);
+$backgroundradialgradient: radial-gradient(#34495d,#1b2838);
+
+
 .section{
   position: relative;
   width: 100%;
@@ -6,17 +12,20 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-image: linear-gradient(125deg,#2c3e50,#27ae60,#2980b9,#e74c3c);
-  background-size: 400%;
-  animation: bganimation 15s infinite;
+  background-image: $backgroundlineargradient;
+  background-size: auto;
+}
+.video-container{
+  position: relative;
+
 }
 
 .section h1{
   text-align: center;
-  font-size: 6rem;
+  font-size: 5rem;
   font-family: Calibri;
-  padding: 20px;
-  margin: 15px;
+  padding: 15px;
+  margin: 12px;
   z-index: 1;
 }
 @keyframes bganimation {
@@ -33,14 +42,21 @@
 
 
 .top-nav-bar{
-  background-color: rgba(154, 154, 154, 0.83);
+  position: sticky;
+  top:0px;
+  background-color: rgba(37, 37, 37, 0.94);
   height: 5vh;
+  -moz-box-shadow: 5px 15px 5px 0px #000;
+  -webkit-box-shadow: 5px 15px 5px 0px #000;
+  box-shadow: 1px 10px 10px #1d1d1d;
+  z-index: 1;
 }
 
 .top-nav-bar a{
   display: block;
-  height: auto;
-  color: #383838;
+  top: 50%;
+  height: 5vh;
+  color: #c9c9c9;
   padding: 10px 16px;
   text-decoration: none;
 }
@@ -53,30 +69,50 @@
 .top-nav-bar p{
   position: absolute;
   display: block;
-  height: auto;
-  color: #383838;
+  height: 5vh;
+  color: #c9c9c9;
   padding: 10px 16px;
   text-decoration: none;
 }
 
+
 .game-section{
   position: relative;
   width: 100%;
-  min-height: 95vh;
+  min-height: 100vh;
   justify-content: center;
   overflow: hidden;
-  background-image: linear-gradient(125deg, #34495d, #1b2838);
+  background-image:$backgroundlineargradient;
+  background-size: auto;
   box-sizing: border-box;
 }
+
+.game-section table{
+  position: relative;
+  width: 80vw;
+  left: 10%;
+  box-shadow: 0px 5px 30px 10px grey;
+}
+.game-section p{
+  position: relative;
+  left: 10%;
+}
+
+.game-section input{
+    position: relative;
+  width: 80vw;
+  left: 10%;
+}
+
 .game-section h1{
   text-align: center;
   padding: 15px;
   font-family: "Century751 BT";
-  color: white;
+  color: $textcolor;
 }
 
 .game-section p{
-  color: white;
+  color: $textcolor;
 }
 
 .achievement-number{
@@ -92,7 +128,7 @@
   text-align: left;
   font-size: 0.8em;
   font-family: Calibri;
-  color: white;
+  color: $textcolor;
 }
 
 .about-section {
@@ -102,7 +138,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background-image: radial-gradient(#34495d,#1b2838);
+  background-image:$backgroundradialgradient;
   box-sizing: border-box;
 }
 
@@ -116,34 +152,35 @@
 }
 
 .about-box p{
-  color: white;
+  color: $textcolor;
   font-size: 1em;
 }
 
 .guide-section {
   position: relative;
-  width: 100%;
-  height: 95vh;
-  background-image: linear-gradient(125deg,#34495d, #1b2838);
-  box-sizing: border-box;
-  background-size: 200%;
+  padding-top: 2%;
+  width: 99vw;
+  min-height: 95vh;
+  overflow: hidden;
+  background-image:$backgroundlineargradient ;
+
 }
 
 .guide-box {
-  position: absolute;
+  position: relative;
   left: 10%;
-  color: white;
+   color: $textcolor;
 }
 
 .guide-box h1{
-  color: white;
+  color: $textcolor;
   font-size: 3em;
   margin-bottom: 0.5em;
 }
 
 .guide-box h2{
   margin-top: 1em;
-  color: white;
+  color:$textcolor;
   font-size: 1.7em;
 }
 
@@ -151,4 +188,18 @@
   background-color: #004c00;
 }
 
+#error-pop-up{
+  width: 80vw;
+  left: 10%;
+}
 
+#search-input{
+  margin-bottom: 2vh;
+}
+
+.scrap-form{
+  left: 10%;
+}
+.form-group{
+  padding-left: 1%;
+}
