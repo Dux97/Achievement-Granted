@@ -49,7 +49,7 @@ def addUnlockedToDetails(gameAchievements, playerUnlocked):
 def scrapLinkAndAddToTable(url, table):
     response = requests.get(url).text
     bf_content = BeautifulSoup(response, "html.parser")
-    domain = url.split( "//" )[-1].split("/")[0]
+    domain = url.split("//")[-1].split("/")[0]
     for row in table:
         if row["displayName"][-1] == " ":
             row["displayName"] = row["displayName"][:-1]
@@ -58,3 +58,17 @@ def scrapLinkAndAddToTable(url, table):
         else:
             row["link"] = "#"
     return table
+
+
+def countLinks(url, table):
+    counter = 0
+    response = requests.get(url).text
+    bf_content = BeautifulSoup(response, "html.parser")
+    domain = url.split("//")[-1].split("/")[0]
+    for row in table:
+        if row["displayName"][-1] == " ":
+            row["displayName"] = row["displayName"][:-1]
+        if bf_content.find("a", text=row["displayName"]):
+            counter += 1
+
+    return counter

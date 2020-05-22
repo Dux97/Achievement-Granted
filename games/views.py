@@ -5,9 +5,10 @@ from django.shortcuts import render, redirect
 from requests import ConnectionError, Timeout
 from requests.exceptions import MissingSchema
 
-from games.forms import SendUrlForm
+from games.forms import SendUrlForm, UrlForm
+from games.models import Game
 from games.utils import getUserGames, getGameInfo, getUnlockedAchievment, \
-    addUnlockedToDetails, scrapLinkAndAddToTable
+    addUnlockedToDetails, scrapLinkAndAddToTable, countLinks
 
 
 def home(request):
@@ -32,8 +33,10 @@ def games(request):
 @login_required(login_url='/account/steam/login')
 def achievement(request, appid):
     errorDescr = {"errorDescription": False}
+    links = Game.objects.filter(name=appid)
     if request.method != 'POST':
-        form = SendUrlForm()
+        form = UrlForm()
+
         try:
             game = getGameInfo(appid)
             unlockedAchievement = getUnlockedAchievment(request, appid)
@@ -61,20 +64,31 @@ def achievement(request, appid):
             errorDescr = {"errorDescription": "No achievements in this game."}
             fullAchievementList = {}
         data = {'achievementSteam': fullAchievementList,
-                "error": errorDescr, 'form': form}
+                "error": errorDescr, 'form': form,'links': links }
     else:
-        form = SendUrlForm(request.POST)
-        if form.is_valid():
-            url = request.POST['url']
-            fullAchievementList = request.session.get(f'fullAchievementList{appid}')
-            try:
-                data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
-                        "error": errorDescr, 'form': form}
-            except MissingSchema:
-                errorDescr = {"errorDescription": "Bad url for scrap. Try diffrent."}
-                data = {'achievementSteam': fullAchievementList,
-                        "error": errorDescr, 'form': form}
-    return render(request, 'pages/achievement.html', data)
+        form = UrlForm(request.POST)
+
+        url = request.POST['link']
+        fullAchievementList = request.session.get(f'fullAchievementList{appid}')
+        try:
+            data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
+                    "error": errorDescr, 'form': form,'links': links}
+
+        except MissingSchema:
+            errorDescr = {"errorDescription": "Bad url for scrap. Try diffrent."}
+            data = {'achievementSteam': fullAchievementList,
+                    "error": errorDescr, 'form': form,'links': links}
+        try:
+            counter = countLinks(url, fullAchievementList)
+            if counter > 10:
+                instance = form.save(commit=False)
+                instance.name = appid
+                instance.save()
+        except ValueError:
+            errorDescr = {"errorDescription": "This game link already exist"}
+            data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
+                    "error": errorDescr, 'form': form,'links': links}
+    return render(request, 'pages/achievement.html', data,)
 
 
 def about(request):
