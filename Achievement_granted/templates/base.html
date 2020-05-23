@@ -6,7 +6,7 @@
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="{% sass_src 'css/basic.scss' %}" rel="stylesheet" type="text/css" />
-    <meta charset="utf-8">
+    <meta charset="utf-8" content ="width=device-width" >
     <title>Home Page</title>
 </head>
 <body>
@@ -15,35 +15,51 @@
 <div class="top-nav-bar">
     {% if user.is_authenticated %}
      <p>Logged as {{user}}</p>
+    {% else %}
+        <p></p>
     {% endif %}
-
-    <ul class="nav nav-pills justify-content-end">
-        <li class="nav-item">
-            <a href="{% url 'home' %}">Achievement Granted</a>
+    <a class="toggle-button">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </a>
+    <div class="navbar-links">
+    <ul >
+        <li>
+            <a href="{% url 'home' %}" >Achievement Granted</a>
         </li>
-        <li class="nav-item">
+        <li>
             <a href="{% url 'guide' %}">Guide</a>
         </li>
-        <li class="nav-item">
+        <li>
             <a href="{% url 'games' %}">Games</a>
         </li>
-        <li class="nav-item">
+        <li>
             <a  href="{% url 'about' %}">About Us</a>
         </li>
-        <li class="nav-item">
+        <li >
             {% if user.is_anonymous %}
             <a  href="/account/steam/login/" >
-                <img src="{% static "images/Steam_login_button.png" %}">
+                <img style="max-width: 150px" src="{% static "images/Steam_login_button.png" %}">
             </a>
              {% else %}
                 <a href="/account/logout/">Log Out</a>
             {% endif %}
         </li>
     </ul>
+   </div>
 </div>
     {% block content %}
     {% endblock %}
 
+<script type="text/javascript">
+const toggleButton = document.getElementsByClassName('toggle-button')[0]
+const navbarLinks = document.getElementsByClassName('navbar-links')[0]
+
+toggleButton.addEventListener('click', () => {
+  navbarLinks.classList.toggle('active')
+})
+</script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>

@@ -9,40 +9,32 @@
             No achievements in this game.
         </div>
     {% endif %}
+
     <input type="text" id="search-input" onkeyup="SearchAchivement()"
            class="form-control" placeholder="Search for names.." title="Type in a name">
-    <table class="table table-dark" id="game-table">
-        <thead>
-            <tr>
-                <th scope="col">Icon</th>
-                <th scope="col">Title</th>
-            </tr>
-        </thead>
-        <tbody >
+
+        <ul class="row" id="game-table">
             {% for game in games.games %}
-                <tr class="game">
-                <td>
-                    <img src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_logo_url}}.jpg"
-                         onerror="this.onerror=null;this.src='{% static "images/EmptyGame.png" %}';">
-                </td>
-                <td>
-                    {{ game.name }}
-                </td>
-                <td>
-                    <a href="{% url 'achievement' game.appid %}"
-                       type="button" class="btn btn-secondary">
-                        Achievements
-                    </a>
-                </td>
-            </tr>
+             <li id="game-padding" >
+                <div class="card text-white bg-dark mb-3" style="width: 18rem; min-width: 10rem; left: 7%"  id="game-card">
+                  <img class="card-img-top" src="http://media.steampowered.com/steamcommunity/public/images/apps/{{game.appid}}/{{game.img_logo_url}}.jpg"
+                                 onerror="this.onerror=null;this.src='{% static "images/EmptyGame.png" %}';" alt="Card image cap">
+                    <div class="card  text-white bg-dark mb-3"   >
+                        <div class="card-body" >
+                            <h5 class="card-title" style="min-height: 10vh; font-size: 1.1vw" >{{ game.name }}</h5>
+                            <a href="{% url 'achievement' game.appid %}" class="btn btn-primary" style="width: 10vw; font-size:1.1vw">Achievement</a>
+                        </div>
+                    </div>
+                </div>
+             </li>
             {% endfor %}
-        </tbody>
-    </table>
+        </ul>
+
 </div>
 
 <script type="text/javascript">
-let timePeriodInMs = 4000
-let error_popup = document.getElementById("error-pop-up")
+let timePeriodInMs = 4000;
+let error_popup = document.getElementById("error-pop-up");
 if (error_popup){
     setTimeout(function () {
     error_popup.style.display = "none";
@@ -53,10 +45,10 @@ const SearchAchivement = () => {
   input = document.getElementById("search-input");
   filter = input.value.toUpperCase();
   table = document.getElementById("game-table");
-  tr = table.getElementsByTagName("tr");
+  tr = table.getElementsByTagName("li");
 
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
+    td = tr[i].getElementsByTagName("h5")[0];
     if (td) {
       txtValue = td.textContent || td.innerText;
       tr[i].style.display = txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none";
