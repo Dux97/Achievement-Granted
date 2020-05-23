@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="game-section">
-        <h1>Achievements</h1>
+        <h1>{{ gameName }} Achievements</h1>
         {% if error.errorDescription %}
             {% for err in error.errorDescription %}
                 <div class="alert alert-danger" role="alert">
