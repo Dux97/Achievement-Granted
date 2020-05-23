@@ -5,9 +5,11 @@
     <div class="game-section">
         <h1>Achievements</h1>
         {% if error.errorDescription %}
-            <div class="alert alert-danger" role="alert">
-                {{ error.errorDescription }}
-            </div>
+            {% for err in error.errorDescription %}
+                <div class="alert alert-danger" role="alert">
+                    {{ err }}
+                </div>
+            {% endfor %}
         {% endif %}
         <div class="col-12" >
             <p>Scrap links from Wiki url</p>

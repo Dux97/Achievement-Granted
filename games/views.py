@@ -8,7 +8,7 @@ from requests.exceptions import MissingSchema
 from games.forms import UrlForm
 from games.models import Game
 from games.utils import getUserGames, getGameInfo, getUnlockedAchievment, \
-    addUnlockedToDetails, scrapLinkAndAddToTable, countLinks
+    addUnlockedToDetails, scrapLinkAndAddToTable, isLinkEfficiency
 
 
 def home(request):
@@ -32,8 +32,8 @@ def games(request):
 
 @login_required(login_url='/account/steam/login')
 def achievement(request, appid):
-    errorDescr = {"errorDescription": False}
-    links = Game.objects.filter(name=appid)
+    errorDescr = {"errorDescription": []}
+    linksDB = Game.objects.filter(name=appid)
     if request.method != 'POST':
         form = UrlForm()
         try:
@@ -42,8 +42,7 @@ def achievement(request, appid):
             try:
                 steamAchievements = game['game']['availableGameStats']['achievements']
             except KeyError:
-                errorDescr = {"errorDescription": "No achievements in this game."}
-                request.session['noAchievements'] = errorDescr
+                request.session['noAchievements'] = {"errorDescription": "No achievements in this game."}
                 return redirect('games')
             try:
                 playerUnlocked = [achievement['name'] for achievement in
@@ -54,38 +53,36 @@ def achievement(request, appid):
             if JSONDecodeError:
                 return redirect('guide')
             else:
-                errorDescr = {'errorDescription': "Something wrong. Please try again."}
+                errorDescr['errorDescription'].append("Something wrong. Please try again.")
         try:
             fullAchievementList = addUnlockedToDetails(steamAchievements, playerUnlocked)
             request.session[f'fullAchievementList{appid}'] = fullAchievementList
             request.session[f'selected_project_id{appid}'] = steamAchievements
         except UnboundLocalError:
-            errorDescr = {"errorDescription": "No achievements in this game."}
+            errorDescr['errorDescription'].append("No achievements in this game.")
             fullAchievementList = {}
         data = {'achievementSteam': fullAchievementList,
-                "error": errorDescr, 'form': form, 'links': links }
+                "error": errorDescr, 'form': form, 'links': linksDB }
     else:
         form = UrlForm(request.POST)
         url = request.POST['link']
         fullAchievementList = request.session.get(f'fullAchievementList{appid}')
         try:
-            data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
-                    "error": errorDescr, 'form': form,'links': links}
-        except MissingSchema:
-            errorDescr = {"errorDescription": "Bad url for scrap. Try diffrent."}
+            scrapedTable, counterEfficiency = scrapLinkAndAddToTable(url, fullAchievementList)
+            data = {'achievementSteam': scrapedTable,
+                    "error": errorDescr, 'form': form, 'links': linksDB}
+            try:
+                if isLinkEfficiency(counterEfficiency, fullAchievementList):
+                    instance = form.save(commit=False)
+                    instance.name = appid
+                    instance.save()
+            except ValueError:
+                pass
+        except (MissingSchema, ConnectionError):
+            errorDescr['errorDescription'].append("Bad url for scrap. Try diffrent.")
             data = {'achievementSteam': fullAchievementList,
-                    "error": errorDescr, 'form': form,'links': links}
-        try:
-            counter = countLinks(url, fullAchievementList)
-            if counter > 10:
-                instance = form.save(commit=False)
-                instance.name = appid
-                instance.save()
-        except ValueError:
-            errorDescr = {"errorDescription": "This game link already exist"}
-            data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
-                    "error": errorDescr, 'form': form,'links': links}
-    return render(request, 'pages/achievement.html', data,)
+                    "error": errorDescr, 'form': form, 'links': linksDB}
+    return render(request, 'pages/achievement.html', data)
 
 
 def about(request):
