@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 import environ
 import requests
 from allauth.socialaccount.models import SocialAccount
@@ -70,5 +68,4 @@ def countLinks(url, table):
             row["displayName"] = row["displayName"][:-1]
         if bf_content.find("a", text=row["displayName"]):
             counter += 1
-
     return counter

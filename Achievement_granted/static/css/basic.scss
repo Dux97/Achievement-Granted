@@ -3,7 +3,6 @@ $backgroundcolor: darkblue;
 $backgroundlineargradient: linear-gradient(125deg, #34495d, #1b2838);
 $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 
-
 .section{
   position: relative;
   width: 100%;
@@ -15,6 +14,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   background-image: $backgroundlineargradient;
   background-size: auto;
 }
+
 .video-container{
   position: relative;
 
@@ -28,6 +28,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   margin: 12px;
   z-index: 1;
 }
+
 @keyframes bganimation {
   0%{
     background-position: 0% 50%;
@@ -39,7 +40,6 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
     background-position: 0% 50%;
   }
 }
-
 
 .top-nav-bar{
   position: sticky;
@@ -66,6 +66,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   background-color: rgba(117, 117, 117, 0.83);
   padding: 13px 16px;
 }
+
 .top-nav-bar p{
   position: absolute;
   display: block;
@@ -74,7 +75,6 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   padding: 10px 16px;
   text-decoration: none;
 }
-
 
 .game-section{
   position: relative;
@@ -93,14 +93,20 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   left: 10%;
   box-shadow: 0px 5px 30px 10px grey;
 }
+
 .game-section p{
   position: relative;
   left: 10%;
 }
 
 .game-section input{
-    position: relative;
+  position: relative;
   width: 80vw;
+  left: 10%;
+}
+
+.game-section button{
+  position: relative;
   left: 10%;
 }
 
@@ -148,7 +154,6 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   height: 40vh;
   width: 30vw;
   position: relative;
-
 }
 
 .about-box p{
@@ -169,7 +174,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 .guide-box {
   position: relative;
   left: 10%;
-   color: $textcolor;
+  color: $textcolor;
 }
 
 .guide-box h1{
@@ -200,6 +205,11 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 .scrap-form{
   left: 10%;
 }
+
 .form-group{
   padding-left: 1%;
+}
+
+.errorlist{
+  display: none;
 }

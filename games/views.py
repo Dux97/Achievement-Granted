@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from requests import ConnectionError, Timeout
 from requests.exceptions import MissingSchema
 
-from games.forms import SendUrlForm, UrlForm
+from games.forms import UrlForm
 from games.models import Game
 from games.utils import getUserGames, getGameInfo, getUnlockedAchievment, \
     addUnlockedToDetails, scrapLinkAndAddToTable, countLinks
@@ -36,7 +36,6 @@ def achievement(request, appid):
     links = Game.objects.filter(name=appid)
     if request.method != 'POST':
         form = UrlForm()
-
         try:
             game = getGameInfo(appid)
             unlockedAchievement = getUnlockedAchievment(request, appid)
@@ -64,16 +63,14 @@ def achievement(request, appid):
             errorDescr = {"errorDescription": "No achievements in this game."}
             fullAchievementList = {}
         data = {'achievementSteam': fullAchievementList,
-                "error": errorDescr, 'form': form,'links': links }
+                "error": errorDescr, 'form': form, 'links': links }
     else:
         form = UrlForm(request.POST)
-
         url = request.POST['link']
         fullAchievementList = request.session.get(f'fullAchievementList{appid}')
         try:
             data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
                     "error": errorDescr, 'form': form,'links': links}
-
         except MissingSchema:
             errorDescr = {"errorDescription": "Bad url for scrap. Try diffrent."}
             data = {'achievementSteam': fullAchievementList,
