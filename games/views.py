@@ -5,9 +5,10 @@ from django.shortcuts import render, redirect
 from requests import ConnectionError, Timeout
 from requests.exceptions import MissingSchema
 
-from games.forms import SendUrlForm
+from games.forms import UrlForm
+from games.models import Game
 from games.utils import getUserGames, getGameInfo, getUnlockedAchievment, \
-    addUnlockedToDetails, scrapLinkAndAddToTable
+    addUnlockedToDetails, scrapLinkAndAddToTable, isLinkEfficiency
 
 
 def home(request):
@@ -31,17 +32,19 @@ def games(request):
 
 @login_required(login_url='/account/steam/login')
 def achievement(request, appid):
-    errorDescr = {"errorDescription": False}
+    errorDescr = {"errorDescription": []}
+    linksDB = Game.objects.filter(name=appid)
     if request.method != 'POST':
-        form = SendUrlForm()
+        form = UrlForm()
         try:
             game = getGameInfo(appid)
             unlockedAchievement = getUnlockedAchievment(request, appid)
+            gameName = game['game']['gameName']
+            request.session['gameName'] = gameName
             try:
                 steamAchievements = game['game']['availableGameStats']['achievements']
             except KeyError:
-                errorDescr = {"errorDescription": "No achievements in this game."}
-                request.session['noAchievements'] = errorDescr
+                request.session['noAchievements'] = {"errorDescription": "No achievements in this game."}
                 return redirect('games')
             try:
                 playerUnlocked = [achievement['name'] for achievement in
@@ -52,28 +55,36 @@ def achievement(request, appid):
             if JSONDecodeError:
                 return redirect('guide')
             else:
-                errorDescr = {'errorDescription': "Something wrong. Please try again."}
+                errorDescr['errorDescription'].append("Something wrong. Please try again.")
         try:
             fullAchievementList = addUnlockedToDetails(steamAchievements, playerUnlocked)
             request.session[f'fullAchievementList{appid}'] = fullAchievementList
             request.session[f'selected_project_id{appid}'] = steamAchievements
         except UnboundLocalError:
-            errorDescr = {"errorDescription": "No achievements in this game."}
+            errorDescr['errorDescription'].append("No achievements in this game.")
             fullAchievementList = {}
-        data = {'achievementSteam': fullAchievementList,
-                "error": errorDescr, 'form': form}
+        data = {'achievementSteam': fullAchievementList, 'gameName': gameName,
+                "error": errorDescr, 'form': form, 'links': linksDB }
     else:
-        form = SendUrlForm(request.POST)
-        if form.is_valid():
-            url = request.POST['url']
-            fullAchievementList = request.session.get(f'fullAchievementList{appid}')
+        form = UrlForm(request.POST)
+        url = request.POST['link']
+        fullAchievementList = request.session.get(f'fullAchievementList{appid}')
+        gameName = request.session.get('gameName')
+        try:
+            scrapedTable, counterEfficiency = scrapLinkAndAddToTable(url, fullAchievementList)
+            data = {'achievementSteam': scrapedTable, 'gameName': gameName,
+                    "error": errorDescr, 'form': form, 'links': linksDB}
             try:
-                data = {'achievementSteam': scrapLinkAndAddToTable(url, fullAchievementList),
-                        "error": errorDescr, 'form': form}
-            except MissingSchema:
-                errorDescr = {"errorDescription": "Bad url for scrap. Try diffrent."}
-                data = {'achievementSteam': fullAchievementList,
-                        "error": errorDescr, 'form': form}
+                if isLinkEfficiency(counterEfficiency, fullAchievementList):
+                    instance = form.save(commit=False)
+                    instance.name = appid
+                    instance.save()
+            except ValueError:
+                pass
+        except (MissingSchema, ConnectionError):
+            errorDescr['errorDescription'].append("Bad url for scrap. Try diffrent.")
+            data = {'achievementSteam': fullAchievementList, 'gameName': gameName,
+                    "error": errorDescr, 'form': form, 'links': linksDB}
     return render(request, 'pages/achievement.html', data)
 
 

@@ -3,6 +3,7 @@ $backgroundcolor: darkblue;
 $backgroundlineargradient: linear-gradient(125deg, #34495d, #1b2838);
 $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 
+
 @media only screen and (max-device-width: 680px) and (orientation: landscape){
   .navbar-links{
     height: 7vh !important;
@@ -117,6 +118,19 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   z-index: 1;
 }
 
+=======
+@keyframes bganimation {
+  0%{
+    background-position: 0% 50%;
+  }
+  50%{
+    background-position: 100% 50%;
+  }
+  100%{
+    background-position: 0% 50%;
+  }
+}
+
 .top-nav-bar{
   position: fixed;
   display: flex;
@@ -160,7 +174,6 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   background-color: rgba(117, 117, 117, 0.83);
 }
 
-
 .top-nav-bar p{
   display: block;
   height: 5vh;
@@ -169,6 +182,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   text-decoration: none;
   margin: .5rem;
 }
+
 
 .toggle-button {
   position: absolute;
@@ -188,6 +202,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   border-radius: 10px;
 }
 
+
 .game-section{
   position: relative;
   padding-top: 10vh;
@@ -200,11 +215,11 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   box-sizing: border-box;
 }
 
-
 #game-card{
   max-width: 12vw;
   box-shadow: 10px 10px 5px 0px #393939;
 }
+
 
 #game-card:hover {
   position: relative;
@@ -220,6 +235,11 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 .game-section input{
   position: relative;
   width: 80vw;
+  left: 10%;
+}
+
+.game-section button{
+  position: relative;
   left: 10%;
 }
 
@@ -324,4 +344,8 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 
 .form-group{
   padding-left: 1%;
+}
+
+.errorlist{
+  display: none;
 }
