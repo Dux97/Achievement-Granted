@@ -2,36 +2,41 @@
 {% load static %}
 
 {% block content %}
-    <div class="game-section">
-        <h1>{{ gameName }} Achievements</h1>
+    <div class="game-section" xmlns="http://www.w3.org/1999/html">
+        <h1>Achievements</h1>
         {% if error.errorDescription %}
-            {% for err in error.errorDescription %}
-                <div class="alert alert-danger" role="alert">
-                    {{ err }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        <div class="alert alert-danger" role="alert">
+            {{ error.errorDescription }}
+        </div>
+    {% endif %}
 
-        <div class="col-12" >
+        <div id="search-input">
+        <div class="col-12" style="width:80%;margin-left: auto;margin-right: auto;">
             <p>Scrap links from Wiki url
-            <i class="fa fa-chevron-down btn btn-dark" type="button"
-                        data-toggle="collapse" data-target="#collapse"
-                        aria-expanded="false" aria-controls="collapse"></i>
-        </div></p>
-        <div class="collapse" id="collapse">
-            <form action="#" method="post" class="form-inline">
-                <datalist id="linkList">
-                    {% for link in links %}
-                        <option value="{{ link.link }}">
-                    {% endfor %}
-                </datalist>
-                {% csrf_token %}
-                {{ form }}
-                <input name="idValue" id="idValue" type="hidden">
-                <button type="submit" class="btn btn-dark">Submit</button>
-            </form>
-            </div>
-        <input type="text" id="search-input" onkeyup="SearchAchivement()"
+
+                </p>
+
+                <form action="#" method="post" class="form-inline" style="" >
+
+                    <div style="position:relative;width:20%;height:25px;border:0;padding:0;margin:0;">
+  <select style="position:absolute;top:0px;left:0px;width:100%; height:25px;line-height:20px;margin:0;padding:0;"
+          onchange="document.getElementById('displayValue').value=this.options[this.selectedIndex].text; document.getElementById('idValue').value=this.options[this.selectedIndex].value;">
+    <option></option>
+       {% if links != null %}
+                        {% for link in links %}
+                                <option>{{ link.link }}</option>
+                      {% endfor %}
+                    {% endif %}
+
+  </select>
+                     {% csrf_token %}
+                    {{ form }}
+
+  <input name="idValue" id="idValue" type="hidden">
+</div>
+                    <button type="submit" class="btn btn-dark" style="position: relative; margin-left: 10px">Submit</button></form>
+            </div></div>
+    <input type="text" id="search-input" onkeyup="SearchAchivement()"
            class="form-control" placeholder="Search for names.." title="Type in a name">
         <table class="table table-dark" id="achievement-table">
             <thead>
@@ -75,6 +80,7 @@ const SearchAchivement = () => {
   filter = input.value.toUpperCase();
   table = document.getElementById("achievement-table");
   tr = table.getElementsByTagName("tr");
+
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[1];
     if (td) {
@@ -83,6 +89,7 @@ const SearchAchivement = () => {
     }
   }
 }
+
 function sortTable() {
   let table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
   table = document.getElementById("achievement-table");
