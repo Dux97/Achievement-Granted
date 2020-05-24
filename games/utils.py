@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 import environ
 import requests
 from allauth.socialaccount.models import SocialAccount
@@ -49,12 +47,31 @@ def addUnlockedToDetails(gameAchievements, playerUnlocked):
 def scrapLinkAndAddToTable(url, table):
     response = requests.get(url).text
     bf_content = BeautifulSoup(response, "html.parser")
-    domain = url.split( "//" )[-1].split("/")[0]
+    domain = url.split("//")[-1].split("/")[0]
+    efficiencyCounter = 0
     for row in table:
         if row["displayName"][-1] == " ":
             row["displayName"] = row["displayName"][:-1]
         if bf_content.find("a", text=row["displayName"]):
             row["link"] = "https://" + domain + bf_content.find("a", text=row["displayName"]).get("href")
+            efficiencyCounter += 1
         else:
             row["link"] = "#"
-    return table
+    return table, efficiencyCounter
+
+
+def countLinkEfficiency(url, table):
+    counter = 0
+    response = requests.get(url).text
+    bf_content = BeautifulSoup(response, "html.parser")
+    for row in table:
+        if row["displayName"][-1] == " ":
+            row["displayName"] = row["displayName"][:-1]
+        if bf_content.find("a", text=row["displayName"]):
+            counter += 1
+    return counter
+
+
+def isLinkEfficiency(effiCounter, table):
+    tableLen = len(table)
+    return effiCounter > tableLen / 2

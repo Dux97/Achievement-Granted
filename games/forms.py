@@ -1,15 +1,18 @@
 from django import forms
+from django.forms import ModelForm
 
 from .models import Game
 
 
-class UrlForm(forms.ModelForm):
+class UrlForm(ModelForm):
+    link = forms.CharField(label="", max_length=150,
+                           widget=forms.TextInput(
+                               attrs={'placeholder': 'Url',
+                                       'type': 'text',
+                                       'list': 'linkList',
+                                      'class': "form-control",
+                               }))
+
     class Meta:
         model = Game
-        fields = ('name', 'wiki_url',)
-
-
-class SendUrlForm(forms.Form):
-    url = forms.CharField(label="", max_length=150, widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                                  'placeholder': 'Url',
-                                                                                  }))
+        fields = ['link']
