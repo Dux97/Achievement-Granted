@@ -39,8 +39,6 @@ def achievement(request, appid):
         try:
             game = getGameInfo(appid)
             unlockedAchievement = getUnlockedAchievment(request, appid)
-            gameName = game['game']['gameName']
-            request.session['gameName'] = gameName
             try:
                 steamAchievements = game['game']['availableGameStats']['achievements']
             except KeyError:
@@ -63,16 +61,15 @@ def achievement(request, appid):
         except UnboundLocalError:
             errorDescr['errorDescription'].append("No achievements in this game.")
             fullAchievementList = {}
-        data = {'achievementSteam': fullAchievementList, 'gameName': gameName,
+        data = {'achievementSteam': fullAchievementList,
                 "error": errorDescr, 'form': form, 'links': linksDB }
     else:
         form = UrlForm(request.POST)
         url = request.POST['link']
         fullAchievementList = request.session.get(f'fullAchievementList{appid}')
-        gameName = request.session.get('gameName')
         try:
             scrapedTable, counterEfficiency = scrapLinkAndAddToTable(url, fullAchievementList)
-            data = {'achievementSteam': scrapedTable, 'gameName': gameName,
+            data = {'achievementSteam': scrapedTable,
                     "error": errorDescr, 'form': form, 'links': linksDB}
             try:
                 if isLinkEfficiency(counterEfficiency, fullAchievementList):
@@ -83,7 +80,7 @@ def achievement(request, appid):
                 pass
         except (MissingSchema, ConnectionError):
             errorDescr['errorDescription'].append("Bad url for scrap. Try diffrent.")
-            data = {'achievementSteam': fullAchievementList, 'gameName': gameName,
+            data = {'achievementSteam': fullAchievementList,
                     "error": errorDescr, 'form': form, 'links': linksDB}
     return render(request, 'pages/achievement.html', data)
 
