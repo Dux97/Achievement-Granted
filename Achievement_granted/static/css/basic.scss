@@ -10,7 +10,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   }
 }
 
-@media only screen and (max-device-width: 680px) and (orientation: portrait) {
+@media  (max-width: 680px), (max-device-width: 680px) and (orientation: portrait) {
 
   .top-nav-bar{
     flex-direction: column;
@@ -20,7 +20,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 
   .top-nav-bar p{
     height: 3vh;
-    font-size: 3.5rem;
+    font-size: 1.5rem;
   }
 
   .navbar-links{
@@ -39,7 +39,7 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 
     .navbar-links  li a{
     padding: .5rem 1rem;
-      font-size: 3.5rem;
+      font-size: 1.5rem;
   }
     .navbar-links  li a img{
       margin: 1rem;
@@ -61,8 +61,16 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
     width: 50vw !important;
   }
 
+  .boxes > div{
+    font-size: .7rem !important;
+  }
 
+  .video-container{
+    height: 100% !important;
+  }
 }
+
+
 
 .section{
   position: relative;
@@ -95,10 +103,10 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 .boxes > div{
   border: 2px solid white;
   width: 25vw;
-  height: 20vh;
+  min-height: 20vh;
   margin: 5vw;
   padding: 20px;
-  font-size: 25px;
+  font-size: 1.1rem;
   text-align: center;
   color: white;
   background-color: #1b2838;
@@ -140,16 +148,14 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
   -moz-box-shadow: 5px 15px 5px 0px #000;
   -webkit-box-shadow: 5px 15px 5px 0px #000;
   box-shadow: 1px 10px 10px #1d1d1d;
-  z-index: 1;
+  z-index: 2;
   opacity: 1;
 }
 
-.navbar-links{
-  height: 100%;
-}
+
 
 .navbar-links ul{
-  height: 100%;
+  min-height: 40px;
   margin: 0;
   padding: 0;
   display: flex;
@@ -274,22 +280,22 @@ $backgroundradialgradient: radial-gradient(#34495d,#1b2838);
 .about-section {
   position: relative;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   padding-top: 5vh;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
   background-image:$backgroundradialgradient;
   box-sizing: border-box;
   background-size: auto;
 }
 
 .about-box{
-  top: 40%;
-  left: 30%;
-  height: 40vh;
-  width: 30vw;
   position: relative;
+  padding-top: 20%;
+  left: 30%;
+  min-height: 40vh;
+  width: 30vw;
+
 }
 
 .about-box p{
